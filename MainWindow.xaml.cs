@@ -1,6 +1,10 @@
-﻿using Microsoft.Win32;
+﻿using FoodAI.Models;
+using Microsoft.Win32;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Windows;
@@ -50,6 +54,10 @@ namespace FoodAI
                     var response = await client.PostAsync(url, content);
 
                     var responseString = await response.Content.ReadAsStringAsync();
+
+                    List<Prediction>? predictions = JsonConvert.DeserializeObject<CustomVision>(responseString)?.Predictions?.ToList();
+
+                    predictionsListView.ItemsSource = predictions;
                 }
             }
         }
